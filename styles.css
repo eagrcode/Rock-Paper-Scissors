@@ -11,11 +11,12 @@ html {
 body {
   background-color: rgb(10, 10, 50);
   color: rgb(200, 200, 200);
+  font-family: "Montserrat", sans-serif, serif;
 }
 
 .modal {
-  /* display: none; */
-  display: flex;
+  display: none;
+
   position: fixed;
   z-index: 1;
 
@@ -37,6 +38,7 @@ body {
   box-shadow: 2px 2px 30px;
   animation-name: modalopen;
   transition: all 0.5s;
+  cursor: pointer;
 }
 
 .modal-content h1,
@@ -76,6 +78,8 @@ p {
 .header h1 {
   font-size: 4rem;
   margin: 1rem 0;
+  font-family: "Russo One", sans-serif;
+  letter-spacing: 3px;
 }
 
 .restart-btn {

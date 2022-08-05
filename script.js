@@ -1,21 +1,21 @@
-// SETS STARTING SCORE FOR PLAYER & COMPUTER
-let computerScore = 0;
-let playerScore = 0;
-// SETS STARTING ROUND
-let roundCount = 1;
-let playerChoice;
-let computerChoice;
+const choices = document.querySelectorAll(".choice");
+const score = document.getElementById("score");
+const result = document.getElementById("result");
+const restart = document.getElementById("restart");
+const modal = document.querySelector(".modal");
 
-// DECLARE VARIABLES FOR ROCK, PAPER, SCISSORS BUTTONS
-const buttons = document.querySelectorAll(".btn");
+const scoreboard = {
+  player: 0,
+  computer: 0,
+};
 
-// PLAYER CHOICE
-buttons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const playerChoice = btn.id.toLowerCase();
-    playRound(playerChoice, computerChoice);
-  });
-});
+// PLAYS GAME
+function play(e) {
+  const playerChoice = e.target.id;
+  const computerChoice = getComputerChoice();
+  const winner = getWinner(playerChoice, computerChoice);
+  showWinner(winner, computerChoice);
+}
 
 // GENERATES RANDOM RESPONSE FROM COMPUTER - "ROCK", "PAPER", OR "SCISSORS"
 function getComputerChoice() {
@@ -32,39 +32,60 @@ function getComputerChoice() {
 }
 
 // SETS CONDITIONS FOR ROUND
-function playRound(playerChoice, computerChoice) {
-  playerChoice = playerChoice;
-  computerChoice = getComputerChoice();
+function getWinner(playerChoice, computerChoice) {
   if (playerChoice === computerChoice) {
     return "It's a draw";
   } else if (playerChoice === "rock" && computerChoice === "scissors") {
-    playerScore++;
-    return "You won!";
+    return "player";
   } else if (playerChoice === "rock" && computerChoice === "paper") {
-    computerScore++;
-    return "You lost!";
+    return "computer";
   } else if (playerChoice === "paper" && computerChoice === "rock") {
-    playerScore++;
-    return "You won!";
+    return "player";
   } else if (playerChoice === "paper" && computerChoice === "scissors") {
-    computerScore++;
-    return "You lost!";
+    return "computer";
   } else if (playerChoice === "scissors" && computerChoice === "paper") {
-    playerScore++;
-    return "You won!";
+    return "player";
   } else if (playerChoice === "scissors" && computerChoice === "rock") {
-    computerScore++;
-    return "You lost!";
+    return "computer";
   }
 }
 
-// RETURNS GAME RESULTS
-function gameScore(playerScore, computerScore) {
-  if (playerScore > computerScore) {
-    return "Congratulations! You Won!";
-  } else if (computerScore > playerScore) {
-    return "You got beat by the computer! You SUCK!";
-  } else return "You tied!";
+function showWinner(winner, computerChoice) {
+  if (winner === "player") {
+    scoreboard.player++;
+    result.innerHTML = `
+    <h1>You Win!</h1>
+    <p>Computer Chose ${computerChoice}</p>
+    `;
+  } else if (winner === "computer") {
+    scoreboard.computer++;
+    result.innerHTML = `
+    <h1>You Lost!</h1>
+    <p>Computer Chose ${computerChoice}</p>
+    `;
+  } else {
+    result.innerHTML = `
+    <h1>It's a Draw!</h1>
+    <p>Computer Chose ${computerChoice}</p>
+    `;
+  }
+  score.innerHTML = `
+    <p>Player: ${scoreboard.player}</p>
+    <p>Computer: ${scoreboard.computer}</p>
+    `;
+
+  modal.style.display = "flex";
 }
 
-console.log(playRound(playerChoice, computerChoice));
+function clearModal(e) {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  } else if (e.target === result) {
+    modal.style.display = "none";
+  }
+}
+
+// PLAYER SELECTION
+choices.forEach((choice) => choice.addEventListener("click", play));
+
+window.addEventListener("click", clearModal);
