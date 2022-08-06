@@ -3,6 +3,9 @@ const score = document.getElementById("score");
 const result = document.getElementById("result");
 const restart = document.getElementById("restart");
 const modal = document.querySelector(".modal");
+const modalContent = document.querySelector(".modal-content");
+const roundCounter = document.getElementById("round-counter");
+let round = 1;
 
 const scoreboard = {
   player: 0,
@@ -54,19 +57,19 @@ function showWinner(winner, computerChoice) {
   if (winner === "player") {
     scoreboard.player++;
     result.innerHTML = `
-    <h1>You Win!</h1>
-    <p>Computer Chose ${computerChoice}</p>
+    <h1 id="modal-text">You Win!</h1>
+    <p id="modal-text">Computer Chose ${computerChoice}</p>
     `;
   } else if (winner === "computer") {
     scoreboard.computer++;
     result.innerHTML = `
-    <h1>You Lost!</h1>
-    <p>Computer Chose ${computerChoice}</p>
+    <h1 id="modal-text">You Lost!</h1>
+    <p id="modal-text">Computer Chose ${computerChoice}</p>
     `;
   } else {
     result.innerHTML = `
-    <h1>It's a Draw!</h1>
-    <p>Computer Chose ${computerChoice}</p>
+    <h1 id="modal-text">It's a Draw!</h1>
+    <p id="modal-text">Computer Chose ${computerChoice}</p>
     `;
   }
   score.innerHTML = `
@@ -80,12 +83,40 @@ function showWinner(winner, computerChoice) {
 function clearModal(e) {
   if (e.target === modal) {
     modal.style.display = "none";
+    round++;
+    roundCounter.innerHTML = `
+  <h3>Round ${round}... FIGHT!</h3>`;
   } else if (e.target === result) {
     modal.style.display = "none";
+    round++;
+    roundCounter.innerHTML = `
+  <h3>Round ${round}... FIGHT!</h3>`;
+  } else if (e.target.id === "modal-text") {
+    modal.style.display = "none";
+    round++;
+    roundCounter.innerHTML = `
+  <h3>Round ${round}... FIGHT!</h3>`;
+  }
+}
+
+function restartGame(e) {
+  if (e.target === restart) {
+    round = 1;
+    scoreboard.player = 0;
+    scoreboard.computer = 0;
+    score.innerHTML = `
+    <p>Player: ${scoreboard.player}</p>
+    <p>Computer: ${scoreboard.computer}</p>
+    `;
+
+    roundCounter.innerHTML = `
+    <h3>Round ${round}... FIGHT!</h3>`;
   }
 }
 
 // PLAYER SELECTION
 choices.forEach((choice) => choice.addEventListener("click", play));
-
+// CLEARS MODAL ON CLICK
 window.addEventListener("click", clearModal);
+// RESTAR BUTTON - SETS SCORE AND ROUND TO 0
+restart.addEventListener("click", restartGame);
